@@ -6,6 +6,9 @@ dofile(vim.fn.stdpath('config') .. '/plugins/fern.lua')
 dofile(vim.fn.stdpath('config') .. '/plugins/copilot.lua')
 dofile(vim.fn.stdpath('config') .. '/plugins/mcphub.lua')
 dofile(vim.fn.stdpath('config') .. '/plugins/neotest.lua')
+dofile(vim.fn.stdpath('config') .. '/plugins/bufferline.lua')
+dofile(vim.fn.stdpath('config') .. '/plugins/lualine.lua')
+
 -- vim.cmd('colorscheme gruvbox-material')
 -- True Colorを有効にする (必須)
 vim.opt.termguicolors = true
