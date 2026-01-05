@@ -43,7 +43,7 @@ return {
     workspaces = {
       {
         name = "personal",
-        path = "/Users/ryo-tsukada/Library/Mobile Documents/iCloud~md~obsidian/Documents/valut",
+        path = "valut Path",
         overrides = {
           daily_notes = {
             folder = "Daily",
