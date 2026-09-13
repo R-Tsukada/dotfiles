@@ -228,6 +228,12 @@ export OBSIDIAN_DAILY_NOTES_FOLDER="valut_cloud/Daily"
 
 `OBSIDIAN_DAILY_NOTES_FOLDER` はVaultからの相対パスです。Vaultの場所だけがPCごとに違うなら、`OBSIDIAN_VAULT_PATH` だけを変更すれば同じ設定を共有できます。設定を変更した後は、新しいターミナルを開いてからNvimを起動します。
 
+## 別PCでTreesitterの設定読み込みに失敗する場合
+
+`module 'nvim-treesitter.configs' not found` は、現在の旧API向け設定に対して新版Treesitterが入っている場合に発生します。この設定では `branch = 'master'` を明示しています。設定を取得した後、Nvimで `:Lazy update nvim-treesitter` を実行し、完了後に再起動してください。
+
+Neovim 0.11では旧版のAPIを使用し、0.12では `config.treesitter-compat` がクエリ処理を補います。Neovim本体を更新するだけでは、Treesitterのブランチの不一致は解消しません。Markdownプレビューの `md-render.nvim` はNeovim 0.12以上が必要です。Homebrewで導入している場合、本体は `brew update` → `brew upgrade neovim` で更新できます。
+
 ## キー変更の対応表
 
 | 以前のキー | 現在のキー |

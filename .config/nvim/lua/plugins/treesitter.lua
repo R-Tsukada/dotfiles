@@ -1,6 +1,8 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
+    -- configs.setup を使う旧APIに合わせる（Neovim 0.11対応）。
+    branch = 'master',
     build = ':TSUpdate',
     event = { 'BufReadPre', 'BufNewFile' },
     opts = {
