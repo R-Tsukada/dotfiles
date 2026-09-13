@@ -2,20 +2,17 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    config = function()
-      require('nvim-treesitter.config').setup {
-        ensure_installed = {
-          "typescript",
-          "tsx",
-        },
-        highlight = {
-          enable = true,
-          -- helpファイルでtreesitterを無効にしてエラーを回避
-          disable = { "help" },
-        },
-        -- Neovim 0.11.0との互換性のため
-        auto_install = false,
-      }
+    event = { 'BufReadPre', 'BufNewFile' },
+    opts = {
+      ensure_installed = { "typescript", "tsx" },
+      highlight = {
+        enable = true,
+        disable = { "help" },
+      },
+      auto_install = false,
+    },
+    config = function(_, opts)
+      require('nvim-treesitter.configs').setup(opts)
 
       -- Workaround: help ファイルで treesitter の自動起動を止める
       vim.api.nvim_create_augroup('fix_help_treesitter', { clear = true })

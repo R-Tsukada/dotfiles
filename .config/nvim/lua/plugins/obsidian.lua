@@ -46,7 +46,8 @@ return {
         path = os.getenv("OBSIDIAN_VAULT_PATH") or error("OBSIDIAN_VAULT_PATH environment variable is not set"),
         overrides = {
           daily_notes = {
-            folder = "Journal/Daily",
+            -- Vault内の相対パス。PCごとに環境変数で上書きできる。
+            folder = os.getenv("OBSIDIAN_DAILY_NOTES_FOLDER") or "valut_cloud/Daily",
             template = "DailyNoteTemplate.md",
           },
           note_path_func = function(spec)

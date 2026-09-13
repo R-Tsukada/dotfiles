@@ -250,19 +250,6 @@ local ok, err = pcall(function()
     return patch_playwright_adapter_async(adapter)
   end
 
-  -- treesitter設定を先に実行（重要！）
-  require('nvim-treesitter.config').setup {
-    ensure_installed = {
-      "typescript",
-      "tsx",
-    },
-    highlight = {
-      enable = true,
-      disable = { "help" },
-    },
-    auto_install = false,
-  }
-
   require('neotest').setup({
     adapters = { neotest_playwright_adapter() },
     log_level = vim.log.levels.INFO,
@@ -329,17 +316,15 @@ vim.api.nvim_create_user_command('NeotestRunNearestUI', run_nearest_test_ui, {})
 -- キーマッピング設定
 map('n', '<leader>tt', '<Cmd>lua require("neotest").run.run()<CR>', { desc = 'Run nearest test' })
 map('n', '<leader>tf', '<Cmd>lua require("neotest").run.run(vim.fn.expand("%:p"))<CR>', { desc = 'Run current file tests' })
-map('n', '<leader>td', '<Cmd>lua require("neotest").run.run({strategy = "dap"})<CR>', { desc = 'Debug nearest test' })
 map('n', '<leader>ts', '<Cmd>lua require("neotest").summary.toggle()<CR>', { desc = 'Toggle test summary' })
 map('n', '<leader>to', '<Cmd>lua require("neotest").output.open({enter = true})<CR>', { desc = 'Open test output' })
-map('n', '<leader>ttu', '<Cmd>NeotestRunNearestUI<CR>', { desc = 'Run nearest test in UI mode' })
+map('n', '<leader>tu', '<Cmd>NeotestRunNearestUI<CR>', { desc = 'Run nearest test in UI mode' })
 map('n', '<leader>tp', '<Cmd>NeotestPlaywrightProject<CR>', { desc = 'Playwright project settings' })
-map('n', '<leader>tpr', '<Cmd>NeotestPlaywrightPreset<CR>', { desc = 'Playwright preset' })
+map('n', '<leader>tP', '<Cmd>NeotestPlaywrightPreset<CR>', { desc = 'Playwright preset' })
 map('n', '<leader>tra', '<Cmd>NeotestPlaywrightRefresh<CR>', { desc = 'Playwright refresh' })
 map('n', '<leader>ta', '<Cmd>lua require("neotest").playwright.attachment()<CR>', { desc = 'Show playwright attachments' })
-map('n', '<leader>th', '<Cmd>NeotestPlaywrightPreset<CR>', { desc = 'Set headed preset' })
-map('n', '<leader>tdb', '<Cmd>NeotestPlaywrightPreset<CR>', { desc = 'Debug mode test' })
 map('n', '<leader>tw', '<Cmd>lua require("neotest").watch.toggle()<CR>', { desc = 'Toggle watch mode (nearest)' })
+map('n', '<leader>tW', '<Cmd>lua require("neotest").watch.toggle(vim.fn.expand("%:p"))<CR>', { desc = 'Toggle watch mode (file)' })
 
 end)
 

@@ -43,11 +43,19 @@ vim.api.nvim_create_autocmd('FileType', {
 -- プラグイン用プレフィックス
 map('n', '<Leader>', '<Nop>')
 map('x', '<Leader>', '<Nop>')
-map('n', '<Plug>(lsp)', '<Nop>')
-map('x', '<Plug>(lsp)', '<Nop>')
-map('n', 'm', '<Plug>(lsp)')
-map('x', 'm', '<Plug>(lsp)')
-map('n', '<Plug>(ff)', '<Nop>')
-map('x', '<Plug>(ff)', '<Nop>')
-map('n', ';', '<Plug>(ff)')
-map('x', ';', '<Plug>(ff)')
+
+-- 保存と操作一覧
+map({ 'n', 'i' }, '<C-s>', '<cmd>w<CR>', { silent = true, desc = 'Save file' })
+map('n', '<leader>?', function()
+  require('config.keymap-help').open()
+end, { desc = '操作一覧を表示' })
+cmd('KeymapHelp', function()
+  require('config.keymap-help').open()
+end, { desc = '操作一覧を表示' })
+
+map('n', '<leader>oq', function()
+  require('config.thino-capture').open()
+end, { desc = '今日のメモを右サイドバーで入力' })
+cmd('ThinoCapture', function()
+  require('config.thino-capture').open()
+end, { desc = '今日の日次ノートへのメモ入力欄を開く' })
