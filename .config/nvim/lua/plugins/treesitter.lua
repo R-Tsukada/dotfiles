@@ -12,6 +12,7 @@ return {
       auto_install = false,
     },
     config = function(_, opts)
+      require('config.treesitter-compat').setup()
       require('nvim-treesitter.configs').setup(opts)
 
       -- Workaround: help ファイルで treesitter の自動起動を止める

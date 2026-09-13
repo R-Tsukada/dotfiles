@@ -13,6 +13,8 @@ return {
       vim.g.coc_global_extensions = extensions
     end,
     config = function()
+      vim.keymap.set('n', 'gd', '<Plug>(coc-definition)',
+        { silent = true, desc = '定義へジャンプ（Coc）' })
       vim.keymap.set('n', '<leader>fo', '<Cmd>CocCommand fzf-preview.CocOutline<CR>',
         { silent = true, desc = 'アウトラインを検索（TypeScript / Markdown）' })
       vim.keymap.set('n', '<leader>fO', '<Cmd>CocOutline<CR>',

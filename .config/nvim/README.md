@@ -64,6 +64,18 @@ Neovim 0.12以上が必要です。md-render.nvimと日本語の折り返しを�
 
 見出し・表・リスト・リンクなどはNvim内で表示します。画像・動画にはKitty graphics protocol対応ターミナル（Ghostty、Kitty、WezTermなど）が必要です。動画はFFmpeg、Mermaid図はMermaid CLI（未導入ならnpx経由で取得）を使用します。通常の文章プレビューのために、これらの追加ツールを一括インストールする必要はありません。
 
+## 定義ジャンプ（TypeScript / Playwright POM）
+
+| キー | 動作 |
+| --- | --- |
+| `gd` | カーソル下の関数・メソッド・クラス・変数の定義へジャンプ（Coc） |
+| `Ctrl+o` | ジャンプ前の場所へ戻る |
+| `Ctrl+i` | ジャンプ履歴を進む |
+
+PlaywrightでPOM（Page Object Model）を使う場合、テスト内の `await loginPage.login()` の `login` にカーソルを合わせて `gd` を押すと、型が解決できる場合はPage Object側のメソッド定義へ移動できます。`new LoginPage(page)` の `LoginPage` でも定義へ移動できます。確認後は `Ctrl+o` でテストに戻ります。Spaceを付けず、ノーマルモードで `g` → `d` の順に押します。
+
+`coc-tsserver` がTypeScriptの型情報を使います。初回は言語サーバーの起動を待ってください。移動できない場合はimport先・型情報・プロジェクトの `tsconfig.json` を確認し、`:CocList extensions` / `:CocInfo` で拡張の状態やエラーを確認できます。コマンドで実行する場合は `:call CocActionAsync('jumpDefinition')` です。
+
 ## アウトライン（TypeScript / TSX / Markdown）
 
 | キー | コマンド | 動作 |
