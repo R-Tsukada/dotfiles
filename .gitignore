@@ -1,0 +1,4 @@
+# Coc.nvim installs these locally from .config/coc/extensions/package.json.
+.config/coc/commands
+.config/coc/extensions/node_modules/
+.config/coc/extensions/@yaegassy/
