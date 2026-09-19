@@ -1,6 +1,8 @@
 return {
   'bullets-vim/bullets.vim',
-  ft = { 'markdown', 'thino-capture' },
+  -- FileTypeイベント後に読み込まれると、同イベントで作るEnterの
+  -- バッファローカルマッピングが間に合わない場合があるため常時読み込む。
+  lazy = false,
   init = function()
     vim.g.bullets_enabled_file_types = { 'markdown', 'thino-capture' }
     vim.g.bullets_enable_in_empty_buffers = 0
