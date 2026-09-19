@@ -64,6 +64,22 @@ Neovim 0.12以上が必要です。md-render.nvimと日本語の折り返しを�
 
 見出し・表・リスト・リンクなどはNvim内で表示します。画像・動画にはKitty graphics protocol対応ターミナル（Ghostty、Kitty、WezTermなど）が必要です。動画はFFmpeg、Mermaid図はMermaid CLI（未導入ならnpx経由で取得）を使用します。通常の文章プレビューのために、これらの追加ツールを一括インストールする必要はありません。
 
+## Markdownのソース表示
+
+編集中はリンクのURLやコードフェンス（バッククォート3個）を隠さず表示します。インデントガイドはconcealを使わない `indent-blankline.nvim`（ibl）で描画します。Markdownとメモ欄は `conceallevel=0` にし、ウィンドウを切り替えた際も適用します。整形表示には既存の `Space mp` / `Space ms` を使えます。
+
+確認は `:verbose setlocal conceallevel?` で行えます。プラグイン置き換え後はNvimを再起動してください。
+
+Obsidian独自の装飾表示は `ui.enable = false` にしています。これにより `conceallevel=0` に関する警告を防ぎます。ノート操作・リンク移動・補完は引き続き利用できます。
+
+## Obsidianのリンク補完
+
+Markdownと `Space oq` のメモ欄で `[[` を入力すると、Cocの `[Vault]` 候補が表示されます。そのままファイル名やaliasesの文字を入力して絞り込めます。`Ctrl+n` / `Ctrl+p` で候補を選び、`Ctrl+y` で確定してください。Enterは箇条書きの改行用です。
+
+例：`[[QA` → 候補選択 → `[[valut_cloud/Daily/アジャイル品質パターン_QAtoAQ_用語定義]]`。同名ファイルを区別するためリンク先にはVault内の相対パスを挿入します。閉じ括弧は自動追加され、すでに `[[]]` の内側で入力している場合は重複させません。ノートの新規作成は行いません。
+
+この補完にはCocが認識できるNode.js、ripgrep、`OBSIDIAN_VAULT_PATH`の設定が必要です。設定追加後はNvimを再起動してください。
+
 ## Markdownの箇条書き入力
 
 `bullets.vim`をLazyで管理しています。Markdownと `Space oq` のメモ入力欄で有効です。
@@ -223,14 +239,28 @@ MacのOptionキーで反応しない場合は、使用しているターミナ�
 | 選択中に `Space ol` | `:ObsidianLink` | 選択範囲をリンク化 |
 | 選択中に `Space on` | `:ObsidianExtractNote` | 選択範囲を新規ノートに抽出 |
 
+行全体を抽出する場合は `V` → `j` / `k` で選択して `Space on` を押します。obsidian.nvim v3.9.0の行単位選択で発生する列位置エラーは、`config.obsidian-selection`で補正しています。
+
 Vaultは環境変数 `OBSIDIAN_VAULT_PATH` で指定します。この変数が未設定だとプラグイン設定の読み込みでエラーになります。
 
 - デイリーノートの保存先：`OBSIDIAN_DAILY_NOTES_FOLDER`。未設定時は `valut_cloud/Daily`
 - デイリーノートのテンプレート：`DailyNoteTemplate.md`
 - テンプレートフォルダ：`Config/Templates`
-- 新規ノートの保存先：現在のバッファのディレクトリ
+- 新規・抽出ノートの保存先：Vaultのルート（タイトルにサブフォルダを明示した場合を除く）。デイリーノートは上記Dailyフォルダ
 - ノートID：タイトル指定時はタイトル、未指定時はタイムスタンプ
 - ノート選択UI：Telescope
+
+新規・抽出時にタイトルを入力すると、現在の設定ではそのタイトルがファイル名になります（例：`QA2QAの用語` → `QA2QAの用語.md`）。空欄ならタイムスタンプ名になります。タイトルの `/` はフォルダ区切りとして扱われるため、通常のタイトルには使いません。
+
+既存ノートのファイル名を変更する場合は、対象ノートを保存し、リンク上ではない位置で `:ObsidianRename QA2QAの用語` を実行します。プラグインがVault内の対応するリンクも更新します。見出し `# タイトル` は別途必要に応じて変更してください。保存先設定の変更だけでは既存ノートは移動しません。
+
+ファイル名には内容が分かる名前を付け、略称や別の呼び方は先頭のYAMLの `aliases` に追加できます。別名の追加だけではファイル名は変わりません。
+
+```yaml
+aliases:
+  - QA2QA
+  - アジャイル品質パターン
+```
 
 複数のPCで使う場合は、各PCのシェル設定でVaultの絶対パスと日次ノート用のVault内相対パスを設定します。たとえばzshでは次のように設定します。
 

@@ -2,6 +2,10 @@ return {
   "epwalsh/obsidian.nvim",
   version = "*", -- recommended, use latest release instead of latest commit
   lazy = true,
+  config = function(_, opts)
+    require('config.obsidian-selection').setup()
+    require('obsidian').setup(opts)
+  end,
   cmd = {
     "ObsidianOpen",
     "ObsidianNew",
@@ -40,6 +44,10 @@ return {
     { "<leader>on", "<cmd>ObsidianExtractNote<cr>", mode = "v", desc = "Extract selection to new note" },
   },
   opts = {
+    -- 編集中はMarkdown記号をそのまま表示する。整形表示はmd-renderを使う。
+    ui = { enable = false },
+    -- notes_subdir を指定しないため、通常の新規・抽出ノートはVault直下。
+    new_notes_location = "notes_subdir",
     workspaces = {
       {
         name = "personal",
@@ -50,10 +58,6 @@ return {
             folder = os.getenv("OBSIDIAN_DAILY_NOTES_FOLDER") or "valut_cloud/Daily",
             template = "DailyNoteTemplate.md",
           },
-          note_path_func = function(spec)
-            local current_dir = vim.fn.expand("%:p:h")
-            return require("plenary.path"):new(current_dir) / (spec.id .. ".md")
-          end,
         },
       },
       -- {

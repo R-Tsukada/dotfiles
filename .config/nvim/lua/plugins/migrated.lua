@@ -12,7 +12,12 @@ return {
       vim.cmd('colorscheme tokyonight')
     end
   },
-  { 'Yggdroot/indentLine' },
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    -- インデントガイドはvirtual textで描画し、Markdownの記号を隠さない。
+    opts = { scope = { enabled = false } },
+  },
 
   { 'nvim-lua/plenary.nvim' },
   { 'antoinemadec/FixCursorHold.nvim' },

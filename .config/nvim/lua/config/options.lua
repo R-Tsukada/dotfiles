@@ -41,6 +41,18 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- conceallevel はウィンドウごとの設定なので、別ウィンドウで開く場合も補正する。
+vim.api.nvim_create_autocmd({ 'FileType', 'BufWinEnter', 'WinEnter' }, {
+  group = vim.api.nvim_create_augroup('markdown_source_visible', { clear = true }),
+  callback = function()
+    if (vim.bo.filetype == 'markdown' or vim.bo.filetype == 'thino-capture')
+      and vim.bo.modifiable and (vim.bo.buftype == '' or vim.bo.buftype == 'acwrite') then
+      vim.wo.conceallevel = 0
+      vim.wo.concealcursor = ''
+    end
+  end,
+})
+
 -- Windows用
 -- 1. デフォルトのヤンク先をシステムクリップボードに設定
 -- これをしないと "+y" のように毎回プラスを指定しないといけなくなります
