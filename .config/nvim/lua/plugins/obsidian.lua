@@ -44,7 +44,7 @@ return {
     { "<leader>on", "<cmd>ObsidianExtractNote<cr>", mode = "v", desc = "Extract selection to new note" },
   },
   opts = {
-    -- 編集中はMarkdown記号をそのまま表示する。整形表示はmd-renderを使う。
+    -- Obsidian独自UIは無効化し、Markdownの装飾表示はmarkviewに任せる。
     ui = { enable = false },
     -- notes_subdir を指定しないため、通常の新規・抽出ノートはVault直下。
     new_notes_location = "notes_subdir",
@@ -55,7 +55,7 @@ return {
         overrides = {
           daily_notes = {
             -- Vault内の相対パス。PCごとに環境変数で上書きできる。
-            folder = os.getenv("OBSIDIAN_DAILY_NOTES_FOLDER") or "valut_cloud/Daily",
+            folder = os.getenv("OBSIDIAN_DAILY_NOTES_FOLDER") or "Journal/Daily",
             template = "DailyNoteTemplate.md",
           },
         },

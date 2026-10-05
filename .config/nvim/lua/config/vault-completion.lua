@@ -45,6 +45,15 @@ function M.complete(option, id)
   if not context or not vim.env.OBSIDIAN_VAULT_PATH or vim.env.OBSIDIAN_VAULT_PATH == '' then
     finish({}); return
   end
+
+  -- An empty search makes obsidian.nvim read every Markdown file (including
+  -- frontmatter aliases) in the vault. Wait for a useful query so typing
+  -- "[[" never blocks on a full-vault scan.
+  local min_chars = vim.g.vault_completion_min_chars or 2
+  if vim.fn.strchars(context.query) < min_chars then
+    finish({}); return
+  end
+
   local ok = pcall(function()
     require('lazy').load({ plugins = { 'obsidian.nvim' } })
     local client = require('obsidian').get_client()
@@ -54,7 +63,7 @@ function M.complete(option, id)
         local success, items = pcall(M.items, client, notes, context, option.bufnr)
         finish(success and items or {})
       end)
-    end)
+    end, { search = { ignore_case = true } })
   end)
   if not ok then finish({}) end
 end

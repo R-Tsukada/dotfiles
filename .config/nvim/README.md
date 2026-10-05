@@ -49,34 +49,74 @@ Fernでは隠しファイルを最初から表示します。
 
 全検索結果を対象にしたい場合は、fzf画面で `Ctrl+a` で全選択してから `Ctrl+q` を押します。バッファ一覧の `Space fb` では `Ctrl+q` の意味が異なるため、この置換フローには使いません。
 
-## Markdownプレビュー（md-render.nvim）
+## Markdownプレビュー（markview.nvim）
 
 | キー | コマンド | 動作 |
 | --- | --- | --- |
-| `Space mp` | `:MdRender` | フローティングプレビューを開閉 |
-| `Space mt` | `:MdRender tab` | 別タブでプレビュー |
-| `Space ms` | `:vert MdRender split` | ソースとプレビューを左右に並べる。編集とスクロールを同期 |
-| `Space md` | `:MdRender demo` | 対応記法のデモを表示 |
+| `Space mp` | `:Markview toggle` | 現在のMarkdownバッファのインラインプレビューを開閉 |
+| `Space ms` | `:Markview splitToggle` | ソースとプレビューを左右に並べて開閉 |
 
-プレビュー内は `Enter` / `za` で折りたたみを切り替え、フローティング・タブ表示は `q` / `Esc` で閉じます。
+markviewは見出し・表・リスト・チェックボックス・Obsidian形式の内部リンクなどをNvim内で装飾します。通常はインライン表示され、カーソル周辺は編集できる表示に切り替わります。
 
-Neovim 0.12以上が必要です。md-render.nvimと日本語の折り返しを補助するbudoux.luaはLazy管理です。プラグインを手動でcloneする必要はありません。
+Neovim 0.10.3以上とTree-sitterの`markdown`・`markdown_inline`パーサーが必要です。この設定ではLazyとTree-sitterが自動的に導入します。問題の確認には`:checkhealth markview`を使います。
 
-見出し・表・リスト・リンクなどはNvim内で表示します。画像・動画にはKitty graphics protocol対応ターミナル（Ghostty、Kitty、WezTermなど）が必要です。動画はFFmpeg、Mermaid図はMermaid CLI（未導入ならnpx経由で取得）を使用します。通常の文章プレビューのために、これらの追加ツールを一括インストールする必要はありません。
+### コールアウト記法（Markview・Obsidian共通）
+
+Markdown（`.md`）では、引用の先頭に`[!種類]`を書きます。本文の各行にも`>`を付け、別のコールアウトとの間には空行を入れます。
+
+```markdown
+> [!TIP]
+> ヒントの本文
+
+> [!WARNING] 実行前に確認
+> 注意事項の本文
+> 複数行の本文も書けます。
+
+> [!NOTE] 読書で気づいたこと
+> ここに自分の気づきを書きます。
+
+> [!INFO] 補足情報
+> 関連する情報をここに書きます。
+```
+
+`[!WARNING]`の後ろには任意のタイトルを書けます。種類名は大文字・小文字を区別しません。`TIPS`ではなく`TIP`を使います。
+
+現在のMarkviewで標準定義されている種類は以下のとおりです。
+
+| 用途 | 種類 |
+| --- | --- |
+| メモ・情報 | `[!NOTE]`、`[!INFO]` |
+| 要約 | `[!ABSTRACT]`、`[!SUMMARY]`、`[!TLDR]` |
+| やること | `[!TODO]` |
+| コツ・ヒント | `[!TIP]`、`[!HINT]` |
+| 重要事項 | `[!IMPORTANT]` |
+| 注意事項 | `[!WARNING]`、`[!ATTENTION]`、`[!CAUTION]` |
+| 疑問・確認事項 | `[!QUESTION]`、`[!HELP]`、`[!FAQ]` |
+| 成功・完了 | `[!SUCCESS]`、`[!CHECK]`、`[!DONE]` |
+| 失敗・不足 | `[!FAILURE]`、`[!FAIL]`、`[!MISSING]` |
+| 危険・エラー | `[!DANGER]`、`[!ERROR]`、`[!BUG]` |
+| 具体例 | `[!EXAMPLE]` |
+| 引用 | `[!QUOTE]`、`[!CITE]` |
+
+表示の色やアイコンはMarkviewとObsidianで異なる場合があります。
+
+MarkviewのREADMEにある`TIP: 本文`や`WARNING: 本文`はAsciiDoc（`.adoc`）用の記法です。Markdownファイルではコールアウトになりません。Obsidianでは閲覧ビューまたはライブプレビューで確認します。ソースモードでは記法がそのまま表示されます。
+
+Mermaidの図はMarkviewでは描画されないため、Obsidianで確認します。
 
 ## Markdownのソース表示
 
-編集中はリンクのURLやコードフェンス（バッククォート3個）を隠さず表示します。インデントガイドはconcealを使わない `indent-blankline.nvim`（ibl）で描画します。Markdownとメモ欄は `conceallevel=0` にし、ウィンドウを切り替えた際も適用します。整形表示には既存の `Space mp` / `Space ms` を使えます。
+markviewのインラインプレビュー中はMarkdown記号が装飾表示されます。カーソル周辺を編集表示にするハイブリッドモードは標準で有効です。`Space mp`でプレビューを無効にすると、Markdown記号をすべて表示できます。Thinoのメモ入力欄は常に装飾なしで表示します。
 
-確認は `:verbose setlocal conceallevel?` で行えます。プラグイン置き換え後はNvimを再起動してください。
+プレビュー中はmarkviewが`conceallevel`を制御します。状態がおかしい場合はNvimを再起動し、`:checkhealth markview`で確認してください。
 
 Obsidian独自の装飾表示は `ui.enable = false` にしています。これにより `conceallevel=0` に関する警告を防ぎます。ノート操作・リンク移動・補完は引き続き利用できます。
 
 ## Obsidianのリンク補完
 
-Markdownと `Space oq` のメモ欄で `[[` を入力すると、Cocの `[Vault]` 候補が表示されます。そのままファイル名やaliasesの文字を入力して絞り込めます。`Ctrl+n` / `Ctrl+p` で候補を選び、`Ctrl+y` で確定してください。Enterは箇条書きの改行用です。
+Markdownと `Space oq` のメモ欄で、`[[QA`のように`[[`の後へ2文字以上入力するとCocの`[Vault]`候補が表示されます。`[[`だけでは全Vault検索を行わないため、入力を待たされません。ファイル名やaliasesで絞り込めます。`Ctrl+n` / `Ctrl+p`で候補を選び、`Ctrl+y`で確定してください。Enterは箇条書きの改行用です。
 
-例：`[[QA` → 候補選択 → `[[valut_cloud/Daily/アジャイル品質パターン_QAtoAQ_用語定義]]`。同名ファイルを区別するためリンク先にはVault内の相対パスを挿入します。閉じ括弧は自動追加され、すでに `[[]]` の内側で入力している場合は重複させません。ノートの新規作成は行いません。
+例：`[[QA` → 候補選択 → `[[アジャイル品質パターン_QAtoAQ_用語定義]]`。同名ファイルを区別する必要がある場合、リンク先にはVault内の相対パスを挿入します。閉じ括弧は自動追加され、すでに `[[]]` の内側で入力している場合は重複させません。ノートの新規作成は行いません。
 
 この補完にはCocが認識できるNode.js、ripgrep、`OBSIDIAN_VAULT_PATH`の設定が必要です。設定追加後はNvimを再起動してください。
 
@@ -243,7 +283,7 @@ MacのOptionキーで反応しない場合は、使用しているターミナ�
 
 Vaultは環境変数 `OBSIDIAN_VAULT_PATH` で指定します。この変数が未設定だとプラグイン設定の読み込みでエラーになります。
 
-- デイリーノートの保存先：`OBSIDIAN_DAILY_NOTES_FOLDER`。未設定時は `valut_cloud/Daily`
+- デイリーノートの保存先：`OBSIDIAN_DAILY_NOTES_FOLDER`。未設定時は `Journal/Daily`
 - デイリーノートのテンプレート：`DailyNoteTemplate.md`
 - テンプレートフォルダ：`Config/Templates`
 - 新規・抽出ノートの保存先：Vaultのルート（タイトルにサブフォルダを明示した場合を除く）。デイリーノートは上記Dailyフォルダ
@@ -266,7 +306,7 @@ aliases:
 
 ```zsh
 export OBSIDIAN_VAULT_PATH="/Users/あなたの名前/…/valut"
-export OBSIDIAN_DAILY_NOTES_FOLDER="valut_cloud/Daily"
+export OBSIDIAN_DAILY_NOTES_FOLDER="Journal/Daily"
 ```
 
 `OBSIDIAN_DAILY_NOTES_FOLDER` はVaultからの相対パスです。Vaultの場所だけがPCごとに違うなら、`OBSIDIAN_VAULT_PATH` だけを変更すれば同じ設定を共有できます。設定を変更した後は、新しいターミナルを開いてからNvimを起動します。
@@ -275,7 +315,7 @@ export OBSIDIAN_DAILY_NOTES_FOLDER="valut_cloud/Daily"
 
 `module 'nvim-treesitter.configs' not found` は、現在の旧API向け設定に対して新版Treesitterが入っている場合に発生します。この設定では `branch = 'master'` を明示しています。設定を取得した後、Nvimで `:Lazy update nvim-treesitter` を実行し、完了後に再起動してください。
 
-Neovim 0.11では旧版のAPIを使用し、0.12では `config.treesitter-compat` がクエリ処理を補います。Neovim本体を更新するだけでは、Treesitterのブランチの不一致は解消しません。Markdownプレビューの `md-render.nvim` はNeovim 0.12以上が必要です。Homebrewで導入している場合、本体は `brew update` → `brew upgrade neovim` で更新できます。
+Neovim 0.11では旧版のAPIを使用し、0.12では `config.treesitter-compat` がクエリ処理を補います。Neovim本体を更新するだけでは、Treesitterのブランチの不一致は解消しません。Markdownプレビューの`markview.nvim`はNeovim 0.10.3以上が必要です。Homebrewで導入している場合、本体は`brew update` → `brew upgrade neovim`で更新できます。
 
 ## キー変更の対応表
 

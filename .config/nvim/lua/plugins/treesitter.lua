@@ -6,7 +6,7 @@ return {
     build = ':TSUpdate',
     event = { 'BufReadPre', 'BufNewFile' },
     opts = {
-      ensure_installed = { "typescript", "tsx" },
+      ensure_installed = { "typescript", "tsx", "markdown", "markdown_inline", "yaml" },
       highlight = {
         enable = true,
         disable = { "help" },

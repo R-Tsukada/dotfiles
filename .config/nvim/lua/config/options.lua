@@ -41,11 +41,12 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- conceallevel はウィンドウごとの設定なので、別ウィンドウで開く場合も補正する。
+-- Thinoの入力欄ではMarkdown記号を隠さない。
+-- 通常のMarkdownはmarkview.nvimがプレビュー状態に応じて制御する。
 vim.api.nvim_create_autocmd({ 'FileType', 'BufWinEnter', 'WinEnter' }, {
-  group = vim.api.nvim_create_augroup('markdown_source_visible', { clear = true }),
+  group = vim.api.nvim_create_augroup('thino_source_visible', { clear = true }),
   callback = function()
-    if (vim.bo.filetype == 'markdown' or vim.bo.filetype == 'thino-capture')
+    if vim.bo.filetype == 'thino-capture'
       and vim.bo.modifiable and (vim.bo.buftype == '' or vim.bo.buftype == 'acwrite') then
       vim.wo.conceallevel = 0
       vim.wo.concealcursor = ''
