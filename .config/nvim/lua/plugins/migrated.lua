@@ -27,7 +27,4 @@ return {
   { 'rcarriga/nvim-dap-ui' },
 
   { 'thinca/vim-qfreplace' },
-  { 'ravitemer/mcphub.nvim', build = function()
-    dofile(vim.fn.stdpath('data') .. '/lazy/mcphub.nvim/bundled_build.lua')
-  end },
 }

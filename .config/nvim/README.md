@@ -14,8 +14,6 @@
 | `(` / `{` / `[` / `'` / `"` | 挿入 | 対になる閉じ文字を挿入し、その間にカーソルを置く |
 | `r` | Quickfixウィンドウ | `:Qfreplace` を起動し、Quickfixの項目を編集して置換する |
 
-CopilotChatの挿入モードでは `Ctrl+s` は保存ではなく送信になります。
-
 ## ファイル検索・ファイルツリー
 
 | キー | コマンド | 動作 |
@@ -171,54 +169,23 @@ TypeScript / TSXでは関数・クラス・interfaceなど、Markdownでは見�
 | `:T npm run dev` | 下側のターミナルで指定コマンドを実行 |
 | ターミナル内の `Esc` | ターミナル入力モードを抜ける |
 
-## Copilot補完
+## Claude Code
 
-挿入モードで使用します。自動提案はOFFです。Markdown・YAML・help・Gitコミットメッセージなどでは補完を無効にしています。
-
-| キー | 動作 |
-| --- | --- |
-| `Alt+]` | 次の提案 |
-| `Alt+[` | 前の提案 |
-| `Alt+l` | 提案を採用 |
-| `Ctrl+]` | 提案を閉じる |
-| `Alt+Enter` | 候補パネルを開く |
-
-候補パネル内のカスタムキー：`[[` / `]]` で前後の候補、`Enter` で採用、`gr` で更新。パネルは下側・高さ40%です。
-
-MacのOptionキーで反応しない場合は、使用しているターミナルのAlt/Meta送信設定を確認してください。
-
-## CopilotChat
-
-| キー | コマンド | 動作 |
-| --- | --- | --- |
-| `Space cc` | `:CopilotChat` | チャットを開く |
-| `Space cb` | `:CopilotChat #buffer:current` | 現在のバッファを指定してチャット |
-| 選択中に `Space cs` | `:CopilotChat #selection` | 選択範囲を指定してチャット |
-| `Space ce` | `:CopilotChatExplain` | コードの説明 |
-| `Space cr` | `:CopilotChatReview` | コードレビュー |
-| `Space cf` | `:CopilotChatFix` | 修正を依頼 |
-| `Space co` | `:CopilotChatOptimize` | 最適化を依頼 |
-
-追加のカスタムプロンプト：
-
-| コマンド | 動作 |
-| --- | --- |
-| `:CopilotChatTests` | 単体テストの作成を依頼 |
-| `:CopilotChatDocs` | コメント形式のドキュメント作成を依頼 |
-| `:CopilotChatFixDiagnostic` | 診断情報を使って修正を依頼 |
-| `:CopilotChatDebugBuffer` | 現在のバッファ番号・名前・有効性・読み込み状態を表示 |
-
-チャットは縦分割・幅50%、自動で挿入モードに入ります。回答は日本語・関西弁、温度は0.1に設定しています。チャット内の送信は挿入モードで `Ctrl+s`、ノーマルモードで `Enter` です。
-
-## Sidekick（AI CLI）
+AI連携は[claudecode.nvim](https://github.com/coder/claudecode.nvim)を使用します。各PCにClaude Code CLIを導入・認証し、Neovimから`claude`を実行できるようPATHを設定してください。ターミナル連携にはsnacks.nvimを使用します。
 
 | キー | 動作 |
 | --- | --- |
-| `Space aa` | AI CLIを開閉 |
-| `Space as` | CLIツールを選択 |
-| `Space ap` | プロンプトを選択 |
+| `Space ac` | Claude Codeを開閉 |
+| `Space af` | Claude Codeへ移動 |
+| `Space ar` | セッションを選んで再開 |
+| `Space aC` | 直前のセッションを再開 |
+| `Space am` | モデルを選択 |
+| `Space ab` | 現在のファイルを追加 |
+| 選択中に`Space as` | 選択範囲を送る |
+| `Space aa` | 変更差分を承認 |
+| `Space ad` | 変更差分を却下 |
 
-マルチプレクサ連携は有効で、バックエンドはtmuxです。
+`:ClaudeCodeStatus`で連携状態を確認できます。Claude Codeに依頼した変更は差分を確認して承認・却下します。Copilot、CopilotChat、Sidekick、MCPHubは削除済みです。旧`Space aa`（Sidekick開閉）は差分承認に変わっています。
 
 ## Playwright / neotest
 

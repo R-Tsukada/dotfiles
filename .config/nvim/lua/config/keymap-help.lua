@@ -8,7 +8,7 @@ function M.open()
     'q または Esc で閉じます。通常の /検索 も使えます。',
     '',
     '基本操作',
-    '  Ctrl+s          保存（CopilotChat の挿入モードでは送信）',
+    '  Ctrl+s          保存',
     '  Ctrl+w h/j/k/l  分割ウィンドウ間の移動',
     '  Ctrl+\\          ToggleTerm の開閉',
     '  :T [コマンド]   下分割のターミナルを開く',

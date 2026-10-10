@@ -29,8 +29,8 @@ opt.softtabstop = 2
 opt.list = true
 opt.listchars = 'tab:>-,trail:.'
 
--- CopilotChat.nvim用の補完設定
-opt.completeopt = { 'menuone', 'noselect', 'popup' } -- CopilotChat補完用
+-- 補完メニューの表示設定
+opt.completeopt = { 'menuone', 'noselect', 'popup' }
 
 -- jsonファイルではconcealを無効化
 vim.api.nvim_create_autocmd('FileType', {
