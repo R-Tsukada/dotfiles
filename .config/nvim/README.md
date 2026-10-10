@@ -47,18 +47,17 @@ Fernでは隠しファイルを最初から表示します。
 
 全検索結果を対象にしたい場合は、fzf画面で `Ctrl+a` で全選択してから `Ctrl+q` を押します。バッファ一覧の `Space fb` では `Ctrl+q` の意味が異なるため、この置換フローには使いません。
 
-## Markdownプレビュー（markview.nvim）
+## Markdownプレビュー（render-markdown.nvim）
 
 | キー | コマンド | 動作 |
 | --- | --- | --- |
-| `Space mp` | `:Markview toggle` | 現在のMarkdownバッファのインラインプレビューを開閉 |
-| `Space ms` | `:Markview splitToggle` | ソースとプレビューを左右に並べて開閉 |
+| `Space mp` | `:RenderMarkdown buf_toggle` | 現在のMarkdownバッファのインラインプレビューを開閉 |
 
-markviewは見出し・表・リスト・チェックボックス・Obsidian形式の内部リンクなどをNvim内で装飾します。通常はインライン表示され、カーソル周辺は編集できる表示に切り替わります。
+render-markdownは見出し・表・リスト・チェックボックス・Obsidian形式の内部リンクなどをNvim内で装飾します。通常モードではインライン表示され、挿入モードではソースを表示します。
 
-Neovim 0.10.3以上とTree-sitterの`markdown`・`markdown_inline`パーサーが必要です。この設定ではLazyとTree-sitterが自動的に導入します。問題の確認には`:checkhealth markview`を使います。
+Neovim 0.9以上（0.10以上推奨）とTree-sitterの`markdown`・`markdown_inline`パーサーが必要です。この設定ではLazyとTree-sitterが自動的に導入します。問題の確認には`:checkhealth render-markdown`を使います。
 
-### コールアウト記法（Markview・Obsidian共通）
+### コールアウト記法（render-markdown・Obsidian共通）
 
 Markdown（`.md`）では、引用の先頭に`[!種類]`を書きます。本文の各行にも`>`を付け、別のコールアウトとの間には空行を入れます。
 
@@ -79,7 +78,7 @@ Markdown（`.md`）では、引用の先頭に`[!種類]`を書きます。本�
 
 `[!WARNING]`の後ろには任意のタイトルを書けます。種類名は大文字・小文字を区別しません。`TIPS`ではなく`TIP`を使います。
 
-現在のMarkviewで標準定義されている種類は以下のとおりです。
+コールアウトの種類は以下のとおりです。
 
 | 用途 | 種類 |
 | --- | --- |
@@ -96,17 +95,21 @@ Markdown（`.md`）では、引用の先頭に`[!種類]`を書きます。本�
 | 具体例 | `[!EXAMPLE]` |
 | 引用 | `[!QUOTE]`、`[!CITE]` |
 
-表示の色やアイコンはMarkviewとObsidianで異なる場合があります。
+表示の色やアイコンはrender-markdownとObsidianで異なる場合があります。
 
-MarkviewのREADMEにある`TIP: 本文`や`WARNING: 本文`はAsciiDoc（`.adoc`）用の記法です。Markdownファイルではコールアウトになりません。Obsidianでは閲覧ビューまたはライブプレビューで確認します。ソースモードでは記法がそのまま表示されます。
+`TIP: 本文`や`WARNING: 本文`はAsciiDoc（`.adoc`）用の記法です。Markdownファイルではコールアウトになりません。Obsidianでは閲覧ビューまたはライブプレビューで確認します。ソースモードでは記法がそのまま表示されます。
 
-Mermaidの図はMarkviewでは描画されないため、Obsidianで確認します。
+Mermaidの図はrender-markdownでは描画されないため、Obsidianで確認します。
+
+`Space ms`の左右分割プレビューは廃止しました。表示切替には`Space mp`を使います。
 
 ## Markdownのソース表示
 
-markviewのインラインプレビュー中はMarkdown記号が装飾表示されます。カーソル周辺を編集表示にするハイブリッドモードは標準で有効です。`Space mp`でプレビューを無効にすると、Markdown記号をすべて表示できます。Thinoのメモ入力欄は常に装飾なしで表示します。
+見出しはH1〜H6の順に紫・青・青緑・緑・黄褐色・赤紫の背景色と、先頭の①〜⑥で区別します。文字は明るい色の太字で、H1・H2には下線を付けます。チェックボックスと表の罫線もカーソル行と前後1行では装飾を外します。挿入モードでは元のMarkdownを表示して編集できます。
 
-プレビュー中はmarkviewが`conceallevel`を制御します。状態がおかしい場合はNvimを再起動し、`:checkhealth markview`で確認してください。
+render-markdownのインラインプレビュー中はMarkdown記号が装飾表示されます。挿入モードではソースを表示し、通常モードではカーソル行と前後1行のリンクなどの装飾を外して元の記法を表示します。`[text](https://example.com)`の括弧やURLも、編集する行の周辺では確認できます。`Space mp`でプレビューを無効にすると、Markdown記号をすべて表示できます。Thinoのメモ入力欄は常に装飾なしで表示します。
+
+プレビュー中はrender-markdownが`conceallevel`を制御します。状態がおかしい場合はNvimを再起動し、`:checkhealth render-markdown`で確認してください。
 
 Obsidian独自の装飾表示は `ui.enable = false` にしています。これにより `conceallevel=0` に関する警告を防ぎます。ノート操作・リンク移動・補完は引き続き利用できます。
 
@@ -282,7 +285,7 @@ export OBSIDIAN_DAILY_NOTES_FOLDER="Journal/Daily"
 
 `module 'nvim-treesitter.configs' not found` は、現在の旧API向け設定に対して新版Treesitterが入っている場合に発生します。この設定では `branch = 'master'` を明示しています。設定を取得した後、Nvimで `:Lazy update nvim-treesitter` を実行し、完了後に再起動してください。
 
-Neovim 0.11では旧版のAPIを使用し、0.12では `config.treesitter-compat` がクエリ処理を補います。Neovim本体を更新するだけでは、Treesitterのブランチの不一致は解消しません。Markdownプレビューの`markview.nvim`はNeovim 0.10.3以上が必要です。Homebrewで導入している場合、本体は`brew update` → `brew upgrade neovim`で更新できます。
+Neovim 0.11では旧版のAPIを使用し、0.12では `config.treesitter-compat` がクエリ処理を補います。Neovim本体を更新するだけでは、Treesitterのブランチの不一致は解消しません。Markdownプレビューの`render-markdown.nvim`はNeovim 0.9以上（0.10以上推奨）が必要です。Homebrewで導入している場合、本体は`brew update` → `brew upgrade neovim`で更新できます。
 
 ## キー変更の対応表
 
