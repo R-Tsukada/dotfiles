@@ -87,6 +87,8 @@ PC固有のVault絶対パスを設定に埋め込まないでください。旧`
 
 ### Vaultリンク補完
 
+選択モードの`Space on`は`config.obsidian-selection.extract()`を呼び、snacks.inputで必須タイトルを入力してから抽出します。選択範囲を事前に保存し、空欄・キャンセル・元バッファの変更時は中止します。直接の`:ObsidianExtractNote`は従来の動作です。
+
 `autoload/coc/source/vault.vim`と`lua/config/vault-completion.lua`がCoc独自の`[Vault]`ソースを提供します。Markdown・`thino-capture`で、`[[`の後に2文字以上入力すると非同期検索します。空の検索で全Vaultを読み込むことを防いでいます。最小文字数は`vim.g.vault_completion_min_chars`（既定2）で変更できます。
 
 検索は大文字・小文字を区別せず、ファイル名やaliasesに対応します。リンク先はVault内の相対パスで、閉じ括弧を重複させません。補完でノートは新規作成しません。`Ctrl+n/p`で選択、`Ctrl+y`で確定し、Enterは箇条書き入力に使います。Node.js・ripgrep・Vault環境変数が必要です。

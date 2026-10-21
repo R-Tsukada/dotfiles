@@ -22,6 +22,7 @@ return {
   --   "BufNewFile path/to/my-vault/*.md",
   -- },
   dependencies = {
+    'folke/snacks.nvim',
     -- Required.
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope.nvim",
@@ -41,7 +42,8 @@ return {
     { "<leader>oc", "<cmd>ObsidianToggleCheckbox<cr>", desc = "Toggle Checkbox" },
     -- ビジュアルモード用
     { "<leader>ol", "<cmd>ObsidianLink<cr>", mode = "v", desc = "Create link from selection" },
-    { "<leader>on", "<cmd>ObsidianExtractNote<cr>", mode = "v", desc = "Extract selection to new note" },
+    { "<leader>on", function() require('config.obsidian-selection').extract() end,
+      mode = "v", desc = "タイトルを入力して選択範囲をノートへ抽出" },
   },
   opts = {
     -- Obsidian独自UIは無効化し、装飾表示はrender-markdownに任せる。
