@@ -59,7 +59,7 @@ lazy.nvim を使用。`lua/config/lazy.lua` でブートストラップし、`lu
 | bufferline.nvim | バッファタブ | `<leader>n/p/bd` |
 | obsidian.nvim | Obsidian ノート | `<leader>on/oo/of/os/ot` |
 | lualine.nvim | ステータスライン | — |
-| render-markdown.nvim | Markdown装飾表示 | `<leader>mp` |
+| md-readable.nvim | 読み取り専用Markdown閲覧 | `<leader>mp/ms/mf/me/mq` |
 | bullets.vim | Markdown・Thino入力欄の箇条書き | Enter等 |
 | indent-blankline.nvim（ibl） | インデントガイド | — |
 
@@ -99,13 +99,9 @@ PC固有のVault絶対パスを設定に埋め込まないでください。旧`
 
 ### Markdown表示とTree-sitter
 
-見出しはH1〜H6に紫・青・青緑・緑・黄褐色・赤紫の背景色と①〜⑥のアイコンを設定します。明るい文字色の太字で、H1・H2のみ下線付きです。独自ハイライトはColorScheme変更後も再設定します。チェックボックス・表の罫線・仮想行はanti_concealの対象に含めます。
+`plugins/md-readable.lua`で`takeshiD/md-readable.nvim`を定義しています。Neovim 0.12以上が必要です。`Space mp`は現在ウィンドウで閲覧、`ms`は左右分割、`mf`はフロート、`me`は元の編集位置へ戻る、`mq`は閲覧終了です。編集バッファとは別の読み取り専用画面を使います。
 
-`anti_conceal`は有効で、`above = 1`、`below = 1`を設定しています。通常モードではカーソル行と前後1行のリンクなどを元の記法で表示し、それ以外は装飾表示します。
-
-render-markdown.nvimを起動時に読み込みます。md-render.nvimとbudoux.luaは削除済みです。`Space mp`でインライン表示を切替、旧`Space ms`の左右分割表示は廃止しました。render-markdownがプレビュー状態に応じて`conceallevel`を制御するため、通常のMarkdownに常時`conceallevel=0`を強制しないでください。Thino入力欄は装飾なしを維持し、Obsidian独自UIは`ui.enable = false`です。
-
-コールアウトはMarkdownの`> [!TIP]`や`> [!INFO]`を使います。`TIP: 本文`はAsciiDoc用で、`.md`ではコールアウトになりません。全種類と使用例はNeovimのREADMEを参照してください。Mermaidの図はObsidianアプリで確認します。
+render-markdown.nvimとそのanti_conceal・独自見出し配色は削除済みです。Obsidian独自UIは無効のままです。画像表示には対応ターミナル、Mermaidにはmmdcが必要で、自動導入しません。診断は`:MdReadable diagnostics`を使います。
 
 nvim-treesitterは旧APIの`configs.setup`に合わせて`branch = 'master'`を固定します。対象パーサーは`typescript`、`tsx`、`markdown`、`markdown_inline`、`yaml`、`auto_install = false`です。Neovim 0.12では`lua/config/treesitter-compat.lua`が互換処理を適用します。
 
@@ -142,4 +138,4 @@ Neovim 内で `:Lazy update` を実行。`lazy-lock.json` が更新される。
 
 設定やキー・環境変数の変更時は`.config/nvim/README.md`とこのファイルも更新します。プラグイン更新時は`lazy-lock.json`に無関係な更新が混ざっていないか確認してください。`.config/coc/`には`mru`・`memos.json`などのデータもあり、設定と区別して扱います。
 
-起動確認はVault環境変数を読み込んだ環境で`nvim --headless +qa`、render-markdownの診断は`:checkhealth render-markdown`を使います。機能変更は該当操作で確認し、コミット前には`git diff --check`と差分を確認します。
+起動確認はVault環境変数を読み込んだ環境で`nvim --headless +qa`、md-readableの診断は`:MdReadable diagnostics`を使います。機能変更は該当操作で確認し、コミット前には`git diff --check`と差分を確認します。

@@ -67,17 +67,76 @@ brew install trash-cli
 
 全検索結果を対象にしたい場合は、fzf画面で `Ctrl+a` で全選択してから `Ctrl+q` を押します。バッファ一覧の `Space fb` では `Ctrl+q` の意味が異なるため、この置換フローには使いません。
 
-## Markdownプレビュー（render-markdown.nvim）
+## Markdown閲覧（md-readable.nvim）
 
-| キー | コマンド | 動作 |
-| --- | --- | --- |
-| `Space mp` | `:RenderMarkdown buf_toggle` | 現在のMarkdownバッファのインラインプレビューを開閉 |
+編集バッファとは別の読み取り専用画面でMarkdownを表示します。編集内容は元のバッファで管理し、閲覧後は元の位置に戻れます。
 
-render-markdownは見出し・表・リスト・チェックボックス・Obsidian形式の内部リンクなどをNvim内で装飾します。通常モードではインライン表示され、挿入モードではソースを表示します。
+| キー | 動作 |
+| --- | --- |
+| `Space mp` | 現在のウィンドウで閲覧 |
+| `Space ms` | 左右分割で閲覧 |
+| `Space mf` | フローティングで閲覧 |
+| `Space me` | 対応する元の編集位置に戻る |
+| `Space mq` | 閲覧画面を閉じる |
 
-Neovim 0.9以上（0.10以上推奨）とTree-sitterの`markdown`・`markdown_inline`パーサーが必要です。この設定ではLazyとTree-sitterが自動的に導入します。問題の確認には`:checkhealth render-markdown`を使います。
+閲覧画面の`g?`でヘルプ、`:MdReadable outline`で見出し一覧、`:MdReadable diagnostics`で診断を表示します。Neovim 0.12以上が必要です。画像表示にはKittyまたはGhostty等の対応環境が必要です。Mermaidは`mmdc`で画像に、`termaid`で文字の図に変換できます。ツールは自動インストールされません。
 
-### コールアウト記法（render-markdown・Obsidian共通）
+### termaidのインストール（Mac・Debian／WSL2）
+
+[termaid](https://github.com/fasouto/termaid)はMermaidをUnicodeの罫線や矢印で描く外部ツールです。WezTermでも画像表示機能に依存せず図を確認できます。
+
+#### Mac
+
+Homebrewを導入済みの場合：
+
+```sh
+brew install termaid
+```
+
+uvを導入済みなら、代わりに次の方法でもインストールできます。このPCではこちらを使用しています。両方を実行する必要はありません。
+
+```sh
+uv tool install termaid
+```
+
+#### Debian（WSL2）
+
+Windows側ではなく、Neovimを実行するDebianのシェル内で実行します。pipxで専用のPython環境に分けてインストールします。
+
+```sh
+sudo apt update
+sudo apt install pipx
+pipx ensurepath
+pipx install termaid
+```
+
+インストール後はシェルを開き直してPATHを反映してください。Debian側にuvを導入済みなら、Macと同じ`uv tool install termaid`も使えます。
+
+#### 動作確認
+
+```sh
+termaid --help
+echo 'graph LR; A-->B-->C' | termaid
+```
+
+Neovimでは`:echo executable('termaid')`が`1`なら検出できています。`0`なら、`~/.local/bin`がPATHに含まれているか確認し、新しいシェルからNeovimを起動してください。
+
+#### md-readableで使う設定
+
+インストールだけでは描画方式は変わりません。`lua/plugins/md-readable.lua`の`opts`で次を指定すると、画像の`mmdc`方式から文字の`termaid`方式に切り替わります。
+
+```lua
+opts = {
+  mermaid = {
+    enable = true,
+    renderer = 'termaid',
+  },
+},
+```
+
+Neovimを再起動し、`Space ms`などで閲覧します。描画できない場合は`:MdReadable diagnostics`を確認してください。
+
+### コールアウト記法
 
 Markdown（`.md`）では、引用の先頭に`[!種類]`を書きます。本文の各行にも`>`を付け、別のコールアウトとの間には空行を入れます。
 
@@ -98,7 +157,7 @@ Markdown（`.md`）では、引用の先頭に`[!種類]`を書きます。本�
 
 `[!WARNING]`の後ろには任意のタイトルを書けます。種類名は大文字・小文字を区別しません。`TIPS`ではなく`TIP`を使います。
 
-コールアウトの種類は以下のとおりです。
+以下はObsidianで使うコールアウトの種類です。閲覧画面での装飾対応はプラグインによって異なります。
 
 | 用途 | 種類 |
 | --- | --- |
@@ -115,23 +174,16 @@ Markdown（`.md`）では、引用の先頭に`[!種類]`を書きます。本�
 | 具体例 | `[!EXAMPLE]` |
 | 引用 | `[!QUOTE]`、`[!CITE]` |
 
-表示の色やアイコンはrender-markdownとObsidianで異なる場合があります。
+表示の色やアイコンは閲覧ソフトによって異なる場合があります。
 
 `TIP: 本文`や`WARNING: 本文`はAsciiDoc（`.adoc`）用の記法です。Markdownファイルではコールアウトになりません。Obsidianでは閲覧ビューまたはライブプレビューで確認します。ソースモードでは記法がそのまま表示されます。
 
-Mermaidの図はrender-markdownでは描画されないため、Obsidianで確認します。
+Mermaidの表示環境がない場合はObsidianで確認します。
 
-`Space ms`の左右分割プレビューは廃止しました。表示切替には`Space mp`を使います。
 
 ## Markdownのソース表示
 
-見出しはH1〜H6の順に紫・青・青緑・緑・黄褐色・赤紫の背景色と、先頭の①〜⑥で区別します。文字は明るい色の太字で、H1・H2には下線を付けます。チェックボックスと表の罫線もカーソル行と前後1行では装飾を外します。挿入モードでは元のMarkdownを表示して編集できます。
-
-render-markdownのインラインプレビュー中はMarkdown記号が装飾表示されます。挿入モードではソースを表示し、通常モードではカーソル行と前後1行のリンクなどの装飾を外して元の記法を表示します。`[text](https://example.com)`の括弧やURLも、編集する行の周辺では確認できます。`Space mp`でプレビューを無効にすると、Markdown記号をすべて表示できます。Thinoのメモ入力欄は常に装飾なしで表示します。
-
-プレビュー中はrender-markdownが`conceallevel`を制御します。状態がおかしい場合はNvimを再起動し、`:checkhealth render-markdown`で確認してください。
-
-Obsidian独自の装飾表示は `ui.enable = false` にしています。これにより `conceallevel=0` に関する警告を防ぎます。ノート操作・リンク移動・補完は引き続き利用できます。
+元のファイルはMarkdown記法を表示した状態で編集します。render-markdown.nvimのインライン装飾・カーソル前後1行のanti_conceal・独自の見出し配色設定は削除しました。閲覧には`Space mp`または`Space ms`を使ってください。Obsidian独自UIは引き続き無効です。
 
 ## Obsidianのリンク補完
 
@@ -307,7 +359,7 @@ export OBSIDIAN_DAILY_NOTES_FOLDER="Journal/Daily"
 
 `module 'nvim-treesitter.configs' not found` は、現在の旧API向け設定に対して新版Treesitterが入っている場合に発生します。この設定では `branch = 'master'` を明示しています。設定を取得した後、Nvimで `:Lazy update nvim-treesitter` を実行し、完了後に再起動してください。
 
-Neovim 0.11では旧版のAPIを使用し、0.12では `config.treesitter-compat` がクエリ処理を補います。Neovim本体を更新するだけでは、Treesitterのブランチの不一致は解消しません。Markdownプレビューの`render-markdown.nvim`はNeovim 0.9以上（0.10以上推奨）が必要です。Homebrewで導入している場合、本体は`brew update` → `brew upgrade neovim`で更新できます。
+Tree-sitterは旧版のAPIを使用し、Neovim 0.12では`config.treesitter-compat`がクエリ処理を補います。Neovim本体を更新するだけでは、Treesitterのブランチの不一致は解消しません。Markdown閲覧の`md-readable.nvim`はNeovim 0.12以上が必要です。Homebrewで導入している場合、本体は`brew update` → `brew upgrade neovim`で更新できます。
 
 ## キー変更の対応表
 
