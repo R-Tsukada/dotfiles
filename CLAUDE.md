@@ -59,7 +59,7 @@ lazy.nvim を使用。`lua/config/lazy.lua` でブートストラップし、`lu
 | bufferline.nvim | バッファタブ | `<leader>n/p/bd` |
 | obsidian.nvim | Obsidian ノート | `<leader>on/oo/of/os/ot` |
 | lualine.nvim | ステータスライン | — |
-| md-readable.nvim | 読み取り専用Markdown閲覧 | `<leader>mp/ms/mf/me/mq` |
+| render-markdown.nvim | Markdownのインライン装飾 | `<leader>mp` |
 | bullets.vim | Markdown・Thino入力欄の箇条書き | Enter等 |
 | indent-blankline.nvim（ibl） | インデントガイド | — |
 
@@ -99,9 +99,7 @@ PC固有のVault絶対パスを設定に埋め込まないでください。旧`
 
 ### Markdown表示とTree-sitter
 
-`plugins/md-readable.lua`で`takeshiD/md-readable.nvim`を定義しています。Neovim 0.12以上が必要です。`Space mp`は現在ウィンドウで閲覧、`ms`は左右分割、`mf`はフロート、`me`は元の編集位置へ戻る、`mq`は閲覧終了です。編集バッファとは別の読み取り専用画面を使います。
-
-render-markdown.nvimとそのanti_conceal・独自見出し配色は削除済みです。Obsidian独自UIは無効のままです。画像表示には対応ターミナル、Mermaidにはmmdcが必要で、自動導入しません。診断は`:MdReadable diagnostics`を使います。
+`plugins/render-markdown.lua`でrender-markdown.nvimを起動時に読み込みます。md-readable.nvimは削除済みで、`Space mp`は現在バッファの装飾切替です。H1〜H6の背景色と①〜⑥、H1・H2の下線を設定し、ColorScheme変更後も再適用します。anti_concealはカーソル前後1行で有効、チェックボックスと表も対象です。Thino入力欄は装飾なしで、Obsidian独自UIは無効です。MermaidはObsidianまたは外部のtermaidで確認し、termaidは自動実行しません。
 
 nvim-treesitterは旧APIの`configs.setup`に合わせて`branch = 'master'`を固定します。対象パーサーは`typescript`、`tsx`、`markdown`、`markdown_inline`、`yaml`、`auto_install = false`です。Neovim 0.12では`lua/config/treesitter-compat.lua`が互換処理を適用します。
 
@@ -138,4 +136,4 @@ Neovim 内で `:Lazy update` を実行。`lazy-lock.json` が更新される。
 
 設定やキー・環境変数の変更時は`.config/nvim/README.md`とこのファイルも更新します。プラグイン更新時は`lazy-lock.json`に無関係な更新が混ざっていないか確認してください。`.config/coc/`には`mru`・`memos.json`などのデータもあり、設定と区別して扱います。
 
-起動確認はVault環境変数を読み込んだ環境で`nvim --headless +qa`、md-readableの診断は`:MdReadable diagnostics`を使います。機能変更は該当操作で確認し、コミット前には`git diff --check`と差分を確認します。
+起動確認はVault環境変数を読み込んだ環境で`nvim --headless +qa`、render-markdownの診断は`:checkhealth render-markdown`を使います。機能変更は該当操作で確認し、コミット前には`git diff --check`と差分を確認します。

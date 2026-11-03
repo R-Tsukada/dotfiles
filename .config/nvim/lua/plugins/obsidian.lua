@@ -46,7 +46,7 @@ return {
       mode = "v", desc = "タイトルを入力して選択範囲をノートへ抽出" },
   },
   opts = {
-    -- Obsidian独自UIは無効化し、閲覧表示はmd-readableに任せる。
+    -- Obsidian独自UIは無効化し、装飾表示はrender-markdownに任せる。
     ui = { enable = false },
     -- notes_subdir を指定しないため、通常の新規・抽出ノートはVault直下。
     new_notes_location = "notes_subdir",

@@ -42,7 +42,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- Thinoの入力欄ではMarkdown記号を隠さない。
--- md-readable.nvimの閲覧画面には元バッファ向けの表示設定を強制しない。
+-- 通常のMarkdownはrender-markdown.nvimが表示状態に応じて制御する。
 vim.api.nvim_create_autocmd({ 'FileType', 'BufWinEnter', 'WinEnter' }, {
   group = vim.api.nvim_create_augroup('thino_source_visible', { clear = true }),
   callback = function()

@@ -67,19 +67,13 @@ brew install trash-cli
 
 全検索結果を対象にしたい場合は、fzf画面で `Ctrl+a` で全選択してから `Ctrl+q` を押します。バッファ一覧の `Space fb` では `Ctrl+q` の意味が異なるため、この置換フローには使いません。
 
-## Markdown閲覧（md-readable.nvim）
+## Markdown表示（render-markdown.nvim）
 
-編集バッファとは別の読み取り専用画面でMarkdownを表示します。編集内容は元のバッファで管理し、閲覧後は元の位置に戻れます。
+編集画面で見出し・表・リンク・チェックボックスを装飾します。`Space mp`（`:RenderMarkdown buf_toggle`）で現在のバッファの表示を切り替えます。md-readableの`Space ms/mf/me/mq`は廃止しました。
 
-| キー | 動作 |
-| --- | --- |
-| `Space mp` | 現在のウィンドウで閲覧 |
-| `Space ms` | 左右分割で閲覧 |
-| `Space mf` | フローティングで閲覧 |
-| `Space me` | 対応する元の編集位置に戻る |
-| `Space mq` | 閲覧画面を閉じる |
+H1〜H6は①〜⑥と背景色で区別し、H1・H2は下線付きです。カーソル行と前後1行はリンク・チェックボックス・表などの装飾を外し、元の記法を表示します。挿入モードも元の記法で編集できます。診断は`:checkhealth render-markdown`を使います。
 
-閲覧画面の`g?`でヘルプ、`:MdReadable outline`で見出し一覧、`:MdReadable diagnostics`で診断を表示します。Neovim 0.12以上が必要です。画像表示にはKittyまたはGhostty等の対応環境が必要です。Mermaidは`mmdc`で画像に、`termaid`で文字の図に変換できます。ツールは自動インストールされません。
+Mermaidの図はrender-markdown単体では描画しません。Obsidianで確認するか、以下のtermaidをターミナルから実行してください。
 
 ### termaidのインストール（Mac・Debian／WSL2）
 
@@ -121,20 +115,14 @@ echo 'graph LR; A-->B-->C' | termaid
 
 Neovimでは`:echo executable('termaid')`が`1`なら検出できています。`0`なら、`~/.local/bin`がPATHに含まれているか確認し、新しいシェルからNeovimを起動してください。
 
-#### md-readableで使う設定
+#### ターミナルから使う
 
-インストールだけでは描画方式は変わりません。`lua/plugins/md-readable.lua`の`opts`で次を指定すると、画像の`mmdc`方式から文字の`termaid`方式に切り替わります。
-
-```lua
-opts = {
-  mermaid = {
-    enable = true,
-    renderer = 'termaid',
-  },
-},
+```sh
+termaid diagram.mmd
+termaid --markdown README.md
 ```
 
-Neovimを再起動し、`Space ms`などで閲覧します。描画できない場合は`:MdReadable diagnostics`を確認してください。
+render-markdown.nvimからtermaidは自動実行しません。必要なときにターミナルから使います。
 
 ### コールアウト記法
 
@@ -178,12 +166,12 @@ Markdown（`.md`）では、引用の先頭に`[!種類]`を書きます。本�
 
 `TIP: 本文`や`WARNING: 本文`はAsciiDoc（`.adoc`）用の記法です。Markdownファイルではコールアウトになりません。Obsidianでは閲覧ビューまたはライブプレビューで確認します。ソースモードでは記法がそのまま表示されます。
 
-Mermaidの表示環境がない場合はObsidianで確認します。
+Mermaidの図はObsidianまたは外部のtermaidで確認します。
 
 
 ## Markdownのソース表示
 
-元のファイルはMarkdown記法を表示した状態で編集します。render-markdown.nvimのインライン装飾・カーソル前後1行のanti_conceal・独自の見出し配色設定は削除しました。閲覧には`Space mp`または`Space ms`を使ってください。Obsidian独自UIは引き続き無効です。
+通常は装飾表示し、カーソル行と前後1行では元の記法を表示します。挿入モードでは全文の元の記法を表示します。`Space mp`で装飾を無効にすることもできます。Thino入力欄は装飾なし、Obsidian独自UIも無効です。
 
 ## Obsidianのリンク補完
 
@@ -359,7 +347,7 @@ export OBSIDIAN_DAILY_NOTES_FOLDER="Journal/Daily"
 
 `module 'nvim-treesitter.configs' not found` は、現在の旧API向け設定に対して新版Treesitterが入っている場合に発生します。この設定では `branch = 'master'` を明示しています。設定を取得した後、Nvimで `:Lazy update nvim-treesitter` を実行し、完了後に再起動してください。
 
-Tree-sitterは旧版のAPIを使用し、Neovim 0.12では`config.treesitter-compat`がクエリ処理を補います。Neovim本体を更新するだけでは、Treesitterのブランチの不一致は解消しません。Markdown閲覧の`md-readable.nvim`はNeovim 0.12以上が必要です。Homebrewで導入している場合、本体は`brew update` → `brew upgrade neovim`で更新できます。
+Tree-sitterは旧版のAPIを使用し、Neovim 0.12では`config.treesitter-compat`がクエリ処理を補います。Neovim本体を更新するだけでは、Treesitterのブランチの不一致は解消しません。Markdown表示は`render-markdown.nvim`を使用します。Homebrewで導入している場合、本体は`brew update` → `brew upgrade neovim`で更新できます。
 
 ## キー変更の対応表
 
