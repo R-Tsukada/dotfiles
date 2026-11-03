@@ -69,6 +69,29 @@ brew install trash-cli
 
 ## Markdown表示（render-markdown.nvim）
 
+### ブラウザプレビューとの併用
+
+`markdown-preview.nvim`も導入しています。編集画面の装飾はrender-markdown、Mermaidや文書全体の確認はブラウザで使い分けます。
+
+| キー | 操作 |
+| --- | --- |
+| `Space mp` | 現在のバッファのインライン装飾を切替 |
+| `Space mb` | ブラウザプレビューを開始・停止 |
+| `Space mB` | ブラウザプレビューを停止 |
+
+Markdownファイルで`:MarkdownPreview`も使えます。編集内容は自動更新され、スクロールも同期します。他のバッファへ移ってもプレビューは維持します。ブラウザ側のMermaid描画にmmdcやtermaidは不要です。
+
+Node.jsとnpmが必要です（このPCは導入済み）。Macは`brew install node`、Debianは`sudo apt install nodejs npm`などで準備します。Lazyのbuildでサーバー用の依存パッケージを導入し、Node.jsで実行します。導入に失敗した場合は`:Lazy build markdown-preview.nvim`で再実行してください。
+
+Macでは標準ブラウザを使います。Debian（WSL2）ではWindows側のブラウザを開くため`wslview`を使用します。WSLのDebian側で次を実行してください。
+
+```sh
+sudo apt update
+sudo apt install wslu
+```
+
+ブラウザが自動で開かない場合は、Neovimのメッセージに表示されるプレビューURL（`:messages`でも確認可能）をWindowsのブラウザへ貼り付けてください。
+
 編集画面で見出し・表・リンク・チェックボックスを装飾します。`Space mp`（`:RenderMarkdown buf_toggle`）で現在のバッファの表示を切り替えます。md-readableの`Space ms/mf/me/mq`は廃止しました。
 
 H1〜H6は①〜⑥と背景色で区別し、H1・H2は下線付きです。カーソル行と前後1行はリンク・チェックボックス・表などの装飾を外し、元の記法を表示します。挿入モードも元の記法で編集できます。診断は`:checkhealth render-markdown`を使います。

@@ -99,6 +99,8 @@ PC固有のVault絶対パスを設定に埋め込まないでください。旧`
 
 ### Markdown表示とTree-sitter
 
+ブラウザプレビューは`plugins/markdown-preview.lua`のiamcco/markdown-preview.nvimを併用します。`Space mb`で開始・停止、`Space mB`で停止。自動起動は無効で、バッファ移動後も維持します。Node.jsとnpmが必要で、Lazyのbuildでappの依存パッケージを導入します。旧バイナリが残っている場合は実行権限を外してNode.jsを優先します。WSLは`wslview`を指定するためDebian側にwsluが必要です。Macは既定ブラウザを使用します。render-markdownの`Space mp`は維持します。
+
 `plugins/render-markdown.lua`でrender-markdown.nvimを起動時に読み込みます。md-readable.nvimは削除済みで、`Space mp`は現在バッファの装飾切替です。H1〜H6の背景色と①〜⑥、H1・H2の下線を設定し、ColorScheme変更後も再適用します。anti_concealはカーソル前後1行で有効、チェックボックスと表も対象です。Thino入力欄は装飾なしで、Obsidian独自UIは無効です。MermaidはObsidianまたは外部のtermaidで確認し、termaidは自動実行しません。
 
 nvim-treesitterは旧APIの`configs.setup`に合わせて`branch = 'master'`を固定します。対象パーサーは`typescript`、`tsx`、`markdown`、`markdown_inline`、`yaml`、`auto_install = false`です。Neovim 0.12では`lua/config/treesitter-compat.lua`が互換処理を適用します。
