@@ -1,0 +1,33 @@
+{
+    "claudeCode.preferredLocation": "panel",
+    "emmet.preferences": {
+
+    },
+    "workbench.diffEditorAssociations": {
+        "*.pdf": "pdf-preview-next.preview"
+    },
+    "workbench.colorTheme": "GitHub Blue",
+    "git.autofetch": true,
+    "claudeCode.hideOnboarding": true,
+    "vim.leader": "<space>",
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["<leader>", "o", "q"],
+            "commands": ["quickMemo.open"]
+        },
+        {
+            "before": ["<leader>", "f", "f"],
+            "commands": ["quickFind.open"]
+        },
+        {
+            "before": ["<leader>", "f", "g"],
+            "commands": ["quickFind.grep"]
+        }
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": ["<leader>", "o", "n"],
+            "commands": ["extractToNote.run"]
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "extract-to-note",
+  "displayName": "Extract Selection To Note",
+  "publisher": "local",
+  "version": "1.0.0",
+  "engines": { "vscode": "^1.80.0" },
+  "main": "./extension.js",
+  "activationEvents": ["onCommand:extractToNote.run"],
+  "contributes": {
+    "commands": [
+      { "command": "extractToNote.run", "title": "選択範囲を新規ノートに抽出" }
+    ]
+  }
+}

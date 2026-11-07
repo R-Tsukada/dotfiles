@@ -11,6 +11,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `.config/nvim/` | `~/.config/nvim` | Neovim 設定 |
 | `.config/coc/` | `~/.config/coc` | coc.nvim 拡張 |
 | `.tmux.conf` | `~/.tmux.conf` | tmux 設定 |
+| `vscode/settings.json` | `~/Library/Application Support/Code/User/settings.json` | VS Code ユーザー設定（VSCodeVim キーバインド含む） |
+| `vscode/extensions/local.*` | `~/.vscode/extensions/local.*`（拡張ごとに個別リンク） | 自作 VS Code 拡張（ノート抽出・クイックメモ・ファイル/単語検索） |
+
+VS Code 拡張は `~/.vscode/extensions` 全体ではなく自作分だけをリンクする（Marketplace 拡張と混ぜない）。拡張のコードを変えたら VS Code で「Developer: Reload Window」が必要。WSL での手順は README.md を参照。
 
 新しい設定を追加するときは、dotfiles 内に置いてシンボリックリンクを張る：
 ```bash

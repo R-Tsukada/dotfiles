@@ -1,0 +1,50 @@
+{
+  "name": "quick-memo",
+  "displayName": "Quick Memo",
+  "publisher": "local",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:quickMemo.open",
+    "onView:quickMemo.memoView"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "quickMemo.open",
+        "title": "クイックメモを開く"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "quickMemo",
+          "title": "クイックメモ",
+          "icon": "$(note)"
+        }
+      ]
+    },
+    "views": {
+      "quickMemo": [
+        {
+          "type": "webview",
+          "id": "quickMemo.memoView",
+          "name": "クイックメモ"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "クイックメモ",
+      "properties": {
+        "quickMemo.vaultRoot": {
+          "type": "string",
+          "default": "",
+          "description": "vaultのルートパス。空欄なら Journal/Daily を含むワークスペースフォルダを自動で使う"
+        }
+      }
+    }
+  }
+}
