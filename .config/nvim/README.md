@@ -338,7 +338,7 @@ AI連携は[claudecode.nvim](https://github.com/coder/claudecode.nvim)を使用�
 
 Vaultは環境変数 `OBSIDIAN_VAULT_PATH` で指定します。この変数が未設定だとプラグイン設定の読み込みでエラーになります。
 
-- デイリーノートの保存先：`OBSIDIAN_DAILY_NOTES_FOLDER`。未設定時は `Journal/Daily`
+- デイリーノートの保存先：`OBSIDIAN_DAILY_NOTES_FOLDER`。未設定時は `Journal/Daily`。実際のノートはその下の年フォルダ（`Journal/Daily/2026/2026-11-03.md`）に作成
 - デイリーノートのテンプレート：`DailyNoteTemplate.md`
 - テンプレートフォルダ：`Config/Templates`
 - 新規・抽出ノートの保存先：Vaultのルート（タイトルにサブフォルダを明示した場合を除く）。デイリーノートは上記Dailyフォルダ

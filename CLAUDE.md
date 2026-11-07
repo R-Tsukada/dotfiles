@@ -78,7 +78,7 @@ lazy.nvim を使用。`lua/config/lazy.lua` でブートストラップし、`lu
 | 環境変数 | 用途・既定値 |
 | --- | --- |
 | `OBSIDIAN_VAULT_PATH` | 必須。Vaultのパス |
-| `OBSIDIAN_DAILY_NOTES_FOLDER` | Vault内の日次ノートフォルダ。既定は`Journal/Daily` |
+| `OBSIDIAN_DAILY_NOTES_FOLDER` | Vault内の日次ノートフォルダ。既定は`Journal/Daily`。ノートはその下の年フォルダ（`2026/2026-11-03.md`） |
 | `OBSIDIAN_CAPTURE_HEADING` | メモ挿入先。既定は`## Diary`。空文字なら末尾に追記 |
 
 PC固有のVault絶対パスを設定に埋め込まないでください。旧`valut_cloud/Daily`は使いません。テンプレートは`Config/Templates/DailyNoteTemplate.md`です。通常の新規・抽出ノートは、タイトルにサブフォルダを指定しない限りVault直下です。ノートIDにはタイトルを使い、タイトルなしの場合は時刻に基づく値です。ノート選択はTelescopeです。

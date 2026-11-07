@@ -58,6 +58,8 @@ return {
           daily_notes = {
             -- Vault内の相対パス。PCごとに環境変数で上書きできる。
             folder = os.getenv("OBSIDIAN_DAILY_NOTES_FOLDER") or "Journal/Daily",
+            -- 年フォルダ配下（Journal/Daily/2026/2026-11-03.md）に作る。
+            date_format = "%Y/%Y-%m-%d",
             template = "DailyNoteTemplate.md",
           },
         },
